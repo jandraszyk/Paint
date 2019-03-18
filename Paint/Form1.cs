@@ -32,8 +32,6 @@ namespace Paint
         public Form1()
         {
             InitializeComponent();
-            
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             graphics = Graphics.FromImage(pictureBox1.Image);
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
@@ -70,6 +68,9 @@ namespace Paint
                                 plug.Click += (s, e) => {
                                     undoList.Push((Bitmap)pictureBox1.Image);
                                     p.changeImage((Bitmap)pictureBox1.Image);
+                                    graphics = Graphics.FromImage(pictureBox1.Image);
+                                    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                                    redoList.Clear();
                                     pictureBox1.Refresh();
                                 };
                                 pluginsMenu.DropDownItems.Add(plug);
@@ -124,15 +125,14 @@ namespace Paint
 
         private void undoItem_Click(object sender, EventArgs e)
         {
-            statusLabel.Text = "Undo last action";
             if(undoList.Count != 0)
             {
+                statusLabel.Text = "Undo last action";
                 Bitmap undoImage = undoList.Pop();
                 redoList.Push((Bitmap)pictureBox1.Image);
                 pictureBox1.Image = undoImage;
-                graphics = Graphics.FromImage(pictureBox1.Image);
+                graphics = Graphics.FromImage(undoImage);
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
                 pictureBox1.Refresh();
             }
         }
@@ -148,7 +148,6 @@ namespace Paint
                 graphics = Graphics.FromImage(pictureBox1.Image);
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 pictureBox1.Refresh();
-
             }
 
         }
@@ -172,7 +171,8 @@ namespace Paint
             isPainting = false;
             x = null;
             y = null;
-                   }
+            pictureBox1.Refresh();
+        }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -196,15 +196,13 @@ namespace Paint
 
             }
 
-
-
         }
 
         private void openMenu_Click(object sender, EventArgs e)
         {
             undoList.Push((Bitmap)pictureBox1.Image);
             OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "Bitmaps|*.bmp|Jpegs|*.jpg|Png|*.png";
+            open.Filter = "Bitmaps|*.bmp|Images|*.jpg|Png|*.png";
             if (open.ShowDialog() == DialogResult.OK)
             {
                 openedImage = Bitmap.FromFile(open.FileName);
