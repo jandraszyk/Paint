@@ -9,7 +9,7 @@
 This project is based on the Paint application installed on every PC running Windows OS. User can draw lines, figures, open images, do some simple image processing and more. The main goal of this project was to support external plugins.
 
 ## Screenshots
-![alt text](https://github.com/jandraszyk/Paint/blob/master/src/Screenshots/app.png "Main window")
+![alt text](https://github.com/jandraszyk/Paint/blob/master/Screenshots/app.png "Main window")
 ## Features
 List of features ready to use:
 * Draw line, square, circle
